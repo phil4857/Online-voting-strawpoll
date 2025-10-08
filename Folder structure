@@ -1,0 +1,10 @@
+frontend/
+├── package.json
+├── public/
+│   ├── index.html
+├── src/
+│   ├── App.js
+│   └── components/
+│       ├── CandidateRegistration.js
+│       ├── VotePage.js
+│       └── ResultsPage.js
