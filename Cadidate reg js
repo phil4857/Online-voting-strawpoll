@@ -1,0 +1,38 @@
+import React, { useState } from "react";
+import axios from "axios";
+
+export default function CandidateRegistration({ pollId }) {
+  const [name, setName] = useState("");
+  const [party, setParty] = useState("");
+  const [photo, setPhoto] = useState("");
+  const [status, setStatus] = useState("");
+
+  const handleRegister = async () => {
+    try {
+      const res = await axios.post("http://localhost:5000/candidates/register", {
+        name, party, photo_url: photo, poll_id: pollId
+      });
+      setStatus(res.data.status);
+
+      // Simulate payment
+      await axios.post("http://localhost:5000/candidates/payment", {
+        candidate_id: res.data.candidate_id,
+        payment_txn_id: "SIMULATED_TXN_001"
+      });
+      setStatus("Payment successful, registration complete!");
+    } catch (err) {
+      setStatus("Error registering candidate");
+    }
+  };
+
+  return (
+    <div>
+      <h2>Candidate Registration</h2>
+      <input placeholder="Name" onChange={e => setName(e.target.value)} />
+      <input placeholder="Party (Optional)" onChange={e => setParty(e.target.value)} />
+      <input placeholder="Photo URL" onChange={e => setPhoto(e.target.value)} />
+      <button onClick={handleRegister}>Register & Pay Ksh 500</button>
+      <p>{status}</p>
+    </div>
+  );
+}
