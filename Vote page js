@@ -1,0 +1,48 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+export default function VotePage({ pollId }) {
+  const [candidates, setCandidates] = useState([]);
+  const [selected, setSelected] = useState(null);
+  const voterId = 1; // Simulate logged-in voter
+
+  useEffect(() => {
+    const fetchCandidates = async () => {
+      const res = await axios.get(`http://localhost:5000/votes/results/${pollId}`);
+      setCandidates(res.data);
+    };
+    fetchCandidates();
+  }, [pollId]);
+
+  const handleVote = async () => {
+    if (!selected) return;
+    try {
+      await axios.post("http://localhost:5000/votes", {
+        voter_id: voterId,
+        candidate_id: selected,
+        poll_id: pollId
+      });
+      alert("Vote recorded!");
+    } catch (err) {
+      alert(err.response.data.msg || "Error voting");
+    }
+  };
+
+  return (
+    <div>
+      <h2>Vote Now</h2>
+      {candidates.map(c => (
+        <div key={c.id}>
+          <input
+            type="radio"
+            name="candidate"
+            value={c.id}
+            onChange={() => setSelected(c.id)}
+          />
+          {c.name} {c.party ? `(${c.party})` : ""}
+        </div>
+      ))}
+      <button onClick={handleVote}>Submit Vote</button>
+    </div>
+  );
+}
