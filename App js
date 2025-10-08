@@ -1,0 +1,19 @@
+import React from "react";
+import CandidateRegistration from "./components/CandidateRegistration";
+import VotePage from "./components/VotePage";
+import ResultsPage from "./components/ResultsPage";
+
+function App() {
+  const pollId = 1; // Example poll
+
+  return (
+    <div>
+      <h1>Strawpoll Voting System</h1>
+      <CandidateRegistration pollId={pollId} />
+      <VotePage pollId={pollId} />
+      <ResultsPage pollId={pollId} />
+    </div>
+  );
+}
+
+export default App;
